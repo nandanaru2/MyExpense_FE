@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../styles/component-css/signin.module.css';
 import { useNavigate } from 'react-router-dom';
-
+import {Login} from '../services/component_services/Sign_in_service'
 interface Signindetails {
   email: string;
   password: string;
@@ -15,8 +15,11 @@ const SignInPage = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
+    const Check =await Login();
+    console.log("got the response",Check);
+    
     // Handle sign-in logic here
     navigate('/home');
     console.log(sigindetails)
