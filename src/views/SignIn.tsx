@@ -54,14 +54,14 @@ const SignInPage = () => {
     e.preventDefault();
     setloading(true)
     const Check = await services.SignUp(sigupdetails).then(res=>{
-      // setloading(false)
+      setloading(false)
       return res}).catch(err=>{
-        // setloading(false)
+        setloading(false)
         console.log(err);
       });
     console.log("got the response", Check);
     // Handle sign-in logic here
-    // navigate('/home');
+    navigate('/home');
     console.log(sigindetails)
   };
 
