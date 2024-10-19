@@ -4,9 +4,8 @@ import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'ax
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,  // Replace with your API base URL
     timeout: 10000,  // Optional: timeout after 10 seconds
-  headers: {
+    headers: {
     'Content-Type': 'application/json',
-    
   }
 });
 
