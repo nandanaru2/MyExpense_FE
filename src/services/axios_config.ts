@@ -9,6 +9,22 @@ const axiosInstance = axios.create({
   }
 });
 
+// Add a response interceptor
+// api.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     const originalRequest = error.config;
+//     if (error.response.status === 403 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+//       const { data } = await api.post('/refresh-token');
+//       localStorage.setItem('accessToken', data.accessToken);
+//       api.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
+//       return api(originalRequest);
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
 // Request interceptor to add JWT token
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {

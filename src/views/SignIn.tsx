@@ -12,7 +12,7 @@ export interface Formdetails {
   password: string;
   confirmPassword?: string;
 }
-interface SigninDetails {
+export interface SigninDetails {
   email: string;
   password: string;
 
@@ -38,8 +38,9 @@ const SignInPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setloading(true)
-    const Check = await services.Login().then(res=>{
+    const Check = await services.Login(sigindetails).then(res=>{
       setloading(false)
+      console.log(res)
       return res}).catch(err=>{
         setloading(false)
         console.log(err);

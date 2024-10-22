@@ -1,8 +1,8 @@
-import { Formdetails } from "../../views/SignIn";
+import { Formdetails ,SigninDetails} from "../../views/SignIn";
 import axiosInstance from "../axios_config";
 
- const Login = () => {
-  return axiosInstance.get(`/check`, {
+ const Login = (Signindata:SigninDetails) => {
+  return axiosInstance.post(`/login`, Signindata,{
     headers: {
       'Content-Type': 'application/json',
     },
