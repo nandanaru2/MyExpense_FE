@@ -1,6 +1,6 @@
-// src/views/Home.tsx
 import React from 'react';
 import { User } from '../types/User';
+import UseLocalStorage from '../hooks/UseLocal_hooks';
 
 interface HomeProps {
   user?: User;
@@ -8,10 +8,14 @@ interface HomeProps {
 }
 
 export const Home: React.FC<HomeProps> = () => {
+  const [userdata] = UseLocalStorage<any>('Token', '');
   return (
     <div>
-      <h1>Welcome, Nandan!</h1>
-      
+      {userdata ? (
+        <h1>Welcome, {userdata.firstname}</h1>
+      ) : (
+        <h1>Loading user data...</h1>
+      )}
     </div>
   );
 };

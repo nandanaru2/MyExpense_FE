@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import styles from '../styles/component-css/signin.module.css';
 import { useNavigate } from 'react-router-dom';
-import  services  from '../services/component_services/Sign_in_service'
+import services from '../services/component_services/Sign_in_service'
 import Loading from '../components/Loader';
+import { jwtValidate } from '../services/jwt';
+import UseLocalStorage from '../hooks/UseLocal_hooks';
 
 
 export interface Formdetails {
-  firstname:string;
-  lastname:string;
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
   confirmPassword?: string;
@@ -15,38 +17,48 @@ export interface Formdetails {
 export interface SigninDetails {
   email: string;
   password: string;
-
 }
-
+export interface UserJwtdetails {
+  firstname:string,
+  lastname: string,
+  email:string,
+  userId:string
+  }
 const SignInPage = () => {
   const [sigindetails, setSiginDetails] = useState<SigninDetails>({
     email: '',
     password: '',
   });
   const [sigupdetails, setSigupDetails] = useState<Formdetails>({
-    firstname:'',
-    lastname:'',
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
   const [loading, setloading] = useState<boolean>(false)
   const [SignUp, setSignUp] = useState<boolean>(false)
+  const [_user, setUser] = UseLocalStorage<UserJwtdetails>("Token", {
+    firstname:"",
+    lastname: "",
+    email:"",
+    userId:""
+    });
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setloading(true)
-    const Check = await services.Login(sigindetails).then(res=>{
+     await services.Login(sigindetails).then(res => {
       setloading(false)
-      console.log(res)
-      return res}).catch(err=>{
-        setloading(false)
-        console.log(err);
-      });
-    console.log("got the response", Check);
-
+     let jwtdata:any = jwtValidate(res.token)
+     setUser(jwtdata?.user)
+      return res
+    }).catch(err => {
+      setloading(false)
+      console.log(err);
+    });
     // Handle sign-in logic here
     navigate('/home');
     console.log(sigindetails)
@@ -54,12 +66,13 @@ const SignInPage = () => {
   const CreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
     setloading(true)
-    const Check = await services.SignUp(sigupdetails).then(res=>{
+    const Check = await services.SignUp(sigupdetails).then(res => {
       setloading(false)
-      return res}).catch(err=>{
-        setloading(false)
-        console.log(err);
-      });
+      return res
+    }).catch(err => {
+      setloading(false)
+      console.log(err);
+    });
     console.log("got the response", Check);
     // Handle sign-in logic here
     navigate('/home');
@@ -82,11 +95,11 @@ const SignInPage = () => {
   };
   const isPasswordValid = () => {
     return (
-        sigupdetails.password !== '' && 
-        sigupdetails.confirmPassword !== '' && 
-        sigupdetails.password === sigupdetails.confirmPassword
+      sigupdetails.password !== '' &&
+      sigupdetails.confirmPassword !== '' &&
+      sigupdetails.password === sigupdetails.confirmPassword
     );
-};
+  };
   return (
     <>
       <Loading isLoading={loading} />
@@ -142,9 +155,9 @@ const SignInPage = () => {
               </div>
               <button disabled={!isPasswordValid()} className={styles.submit}>Register !!</button>
               <p className={styles.account}>
-              Already have an Account ?{' '}
-              <span className={styles.register} onClick={()=>{setSignUp(!SignUp)}}>Signin</span>
-            </p>
+                Already have an Account ?{' '}
+                <span className={styles.register} onClick={() => { setSignUp(!SignUp) }}>Signin</span>
+              </p>
             </div>
 
           </form>
@@ -179,7 +192,7 @@ const SignInPage = () => {
             </div>
             <p className={styles.account}>
               Don't have an account?{' '}
-              <span className={styles.register} onClick={()=>{setSignUp(!SignUp)}}>Register</span>
+              <span className={styles.register} onClick={() => { setSignUp(!SignUp) }}>Register</span>
             </p>
           </form>
         </div>
