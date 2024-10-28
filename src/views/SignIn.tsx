@@ -3,7 +3,6 @@ import styles from '../styles/component-css/signin.module.css';
 import { useNavigate } from 'react-router-dom';
 import services from '../services/component_services/Sign_in_service'
 import Loading from '../components/Loader';
-import { jwtValidate } from '../services/jwt';
 import UseLocalStorage from '../hooks/UseLocal_hooks';
 
 
@@ -38,12 +37,7 @@ const SignInPage = () => {
   });
   const [loading, setloading] = useState<boolean>(false)
   const [SignUp, setSignUp] = useState<boolean>(false)
-  const [_user, setUser] = UseLocalStorage<UserJwtdetails>("Token", {
-    firstname:"",
-    lastname: "",
-    email:"",
-    userId:""
-    });
+  const [_user, setUser] = UseLocalStorage<string|"">("Token", "");
 
   const navigate = useNavigate();
 
@@ -52,8 +46,7 @@ const SignInPage = () => {
     setloading(true)
      await services.Login(sigindetails).then(res => {
       setloading(false)
-     let jwtdata:any = jwtValidate(res.token)
-     setUser(jwtdata?.user)
+     setUser(res.token)
       return res
     }).catch(err => {
       setloading(false)
